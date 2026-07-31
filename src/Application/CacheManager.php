@@ -177,13 +177,11 @@ class CacheManager
         $templateFile = file_exists(FileUtils::RESOURCES_PATH . 'htaccess' . $apacheVersion . '_template')
             ? FileUtils::RESOURCES_PATH . 'htaccess' . $apacheVersion . '_template'
             : FileUtils::RESOURCES_PATH . 'htaccess_template';
-        $template = TemplatePolyfill::get($templateFile);
-        $template->setVar([
+        file_put_contents($htaccessFile, TemplatePolyfill::render($templateFile, [
             'new_all' => $allowed ? 'granted' : 'denied',
             'old_allow' => $allowed ? 'all' : 'none',
             'old_deny' => $allowed ? 'none' : 'all',
-        ]);
-        file_put_contents($htaccessFile, $template->render());
+        ]));
     }
 
     /**

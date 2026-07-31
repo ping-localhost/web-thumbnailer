@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.3.0 - 2026-07-31
+
+### Changed
+
+ * Package name is now `ping-localhost/web-thumbnailer` (replaces `arthurhoaro/web-thumbnailer`)
+ * Require PHP 8.1+ and `ext-gd`
+ * Drop production dependency on `phpunit/php-text-template`; `.htaccess` templates use a tiny `strtr` renderer
+
+### Fixed
+
+ * `get_headers()` associative flag uses `true` (PHP 8 TypeError on int `1`)
+
 ## v2.2.0 - 2022-11-24
 
 ### Added

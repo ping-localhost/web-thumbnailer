@@ -62,11 +62,11 @@ class WebAccessPHP implements WebAccess
     {
         stream_context_set_default($this->getContext($timeout));
 
-        $headers = @get_headers($url, 1);
+        $headers = @get_headers($url, true);
         // Some hosts don't like fulluri request, some requires it...
         if ($headers === false) {
             stream_context_set_default($this->getContext($timeout, false));
-            $headers = @get_headers($url, 1);
+            $headers = @get_headers($url, true);
         }
 
         // Headers found, redirection found, and limit not reached.
