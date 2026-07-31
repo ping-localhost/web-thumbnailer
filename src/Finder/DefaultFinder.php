@@ -146,6 +146,9 @@ class DefaultFinder extends FinderCommon
     /**
      * Applies the regexp on the HTML $content to extract the thumb URL.
      *
+     * Supports OpenGraph structured image properties (og:image:url / og:image:secure_url)
+     * as well as the root og:image. See https://ogp.me/#structured
+     *
      * @param string $content Downloaded HTML content
      *
      * @return string|false Extracted thumb URL or false if not found.
@@ -154,17 +157,20 @@ class DefaultFinder extends FinderCommon
     {
         $propertiesKey = ['property', 'name', 'itemprop'];
         $properties = implode('|', $propertiesKey);
-        // Try to retrieve OpenGraph image.
-        $ogRegex = '#<meta[^>]+(?:' . $properties . ')=["\']?og:image["\'\s][^>]*content=["\']?(.*?)["\'\s>]#';
-        // If the attributes are not in the order property => content (e.g. Github)
-        // New regex to keep this readable... more or less.
-        $ogRegexReverse = '#<meta[^>]+content=["\']?([^"\'\s]+)[^>]+(?:' . $properties . ')=["\']?og:image["\'\s/>]#';
 
-        if (
-            preg_match($ogRegex, $content, $matches) > 0
-            || preg_match($ogRegexReverse, $content, $matches) > 0
-        ) {
-            return $matches[1];
+        // Prefer HTTPS when available, then root og:image, then og:image:url.
+        foreach (['og:image:secure_url', 'og:image', 'og:image:url'] as $prop) {
+            $quoted = preg_quote($prop, '#');
+            // Exact property match — og:image must not swallow og:image:width etc.
+            $ogRegex = '#<meta[^>]+(?:' . $properties . ')=["\']?' . $quoted . '["\'\s][^>]*content=["\']?(.*?)["\'\s>]#i';
+            $ogRegexReverse = '#<meta[^>]+content=["\']?(.*?)["\'\s][^>]+(?:' . $properties . ')=["\']?' . $quoted . '["\'\s/>]#i';
+
+            if (
+                preg_match($ogRegex, $content, $matches) > 0
+                || preg_match($ogRegexReverse, $content, $matches) > 0
+            ) {
+                return $matches[1];
+            }
         }
 
         return false;

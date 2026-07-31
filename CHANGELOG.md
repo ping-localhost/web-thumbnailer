@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.3.1 - 2026-07-31
+
+### Added
+
+ * OpenGraph structured image properties: `og:image:url` and `og:image:secure_url` ([#25](https://github.com/ArthurHoaro/web-thumbnailer/issues/25))
+ * Instagram post/TV thumbs via `/p/{id}/media/?size=` hotlink (no HTML scrape / login wall)
+
+### Fixed
+
+ * `get_headers()` associative flag uses `true` ([#38](https://github.com/ArthurHoaro/web-thumbnailer/pull/38))
+ * Instagram og:image capture keeps CDN query string ([#31](https://github.com/ArthurHoaro/web-thumbnailer/pull/31); already in v2.0.4, post URLs now use media endpoint)
+
 ## v2.3.0 - 2026-07-31
 
 ### Changed

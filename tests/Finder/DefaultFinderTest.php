@@ -72,6 +72,53 @@ class DefaultFinderTest extends TestCase
     }
 
     /**
+     * Structured property only (og:image:url) — https://github.com/ArthurHoaro/web-thumbnailer/issues/25
+     */
+    public function testExtractMetaTagOgImageUrl(): void
+    {
+        $html = '<html><head>'
+            . '<meta property="og:image:width" content="1200" />'
+            . '<meta property="og:image:url" content="https://example.com/structured.jpg?x=1&y=2" />'
+            . '<meta property="og:image:height" content="630" />'
+            . '</head></html>';
+
+        $this->assertSame(
+            'https://example.com/structured.jpg?x=1&y=2',
+            DefaultFinder::extractMetaTag($html)
+        );
+    }
+
+    /**
+     * Prefer og:image:secure_url over http og:image.
+     */
+    public function testExtractMetaTagPrefersSecureUrl(): void
+    {
+        $html = '<html><head>'
+            . '<meta property="og:image" content="http://example.com/img.jpg" />'
+            . '<meta property="og:image:secure_url" content="https://secure.example.com/img.jpg" />'
+            . '</head></html>';
+
+        $this->assertSame(
+            'https://secure.example.com/img.jpg',
+            DefaultFinder::extractMetaTag($html)
+        );
+    }
+
+    /**
+     * og:image:width must not be mistaken for an image URL.
+     */
+    public function testExtractMetaTagIgnoresNonUrlStructuredProps(): void
+    {
+        $html = '<html><head>'
+            . '<meta property="og:image:width" content="1200" />'
+            . '<meta property="og:image:height" content="630" />'
+            . '<meta property="og:image" content="https://example.com/root.jpg" />'
+            . '</head></html>';
+
+        $this->assertSame('https://example.com/root.jpg', DefaultFinder::extractMetaTag($html));
+    }
+
+    /**
      * Test the default finder trying to find an open graph link.
      */
     public function testDefaultFinderOpenGraphRemote(): void

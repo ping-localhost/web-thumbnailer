@@ -187,8 +187,39 @@
       "thumbnail_url": "https://i.imgur.com/${1}${size}.jpg"
     }
   },
+  "instagram_post": {
+    "domains": ["instagram.com"],
+    "url_require": "/(p|tv)/",
+    "finder": "UrlRegex",
+    "options": {
+      "hotlink_allowed": true,
+      "size": {
+        "default": "large",
+        "small": {
+          "param": "t",
+          "maxwidth": "150",
+          "maxheight": "150"
+        },
+        "medium": {
+          "param": "m",
+          "maxwidth": "320",
+          "maxheight": "320"
+        },
+        "large": {
+          "param": "l",
+          "maxwidth": "1080",
+          "maxheight": "1080"
+        }
+      }
+    },
+    "rules": {
+      "url_regex": "instagram\\.com/(?:p|tv)/([\\w-]+)",
+      "thumbnail_url": "https://www.instagram.com/p/${1}/media/?size=${size}"
+    }
+  },
   "instagram": {
     "domains": ["instagram.com"],
+    "url_exclude": "/(p|tv)/",
     "finder": "QueryRegex",
     "options": {
       "hotlink_allowed": true

@@ -273,7 +273,8 @@ class QueryRegexFinderTest extends TestCase
     }
 
     /**
-     * Test Instagram thumb: one picture
+     * Test Instagram thumb: one picture (legacy QueryRegex / og:image with query string).
+     * Post URLs now use UrlRegex → /media/?size= — see testUrlRegexInstagramPost.
      */
     public function testQueryRegexInstagramPicture(): void
     {
@@ -287,6 +288,21 @@ class QueryRegexFinderTest extends TestCase
         $url = __DIR__ . '/../resources/instagram/instagram-picture.html';
         $finder = new QueryRegexFinder('domain.tld', $url, $rules, $options);
         $this->assertEquals($expected, $finder->find());
+    }
+
+    /**
+     * Instagram post/TV URLs resolve via /media/?size= without scraping (avoids login wall).
+     */
+    public function testUrlRegexInstagramPost(): void
+    {
+        $allRules = DataUtils::loadJson(FileUtils::RESOURCES_PATH . 'rules.json');
+        $rules = $allRules['instagram_post']['rules'];
+        $options = $allRules['instagram_post']['options'];
+        $finder = new UrlRegexFinder('instagram.com', 'https://www.instagram.com/p/BL3FRY7F0DJ/', $rules, $options);
+        $this->assertSame(
+            'https://www.instagram.com/p/BL3FRY7F0DJ/media/?size=l',
+            $finder->find()
+        );
     }
 
     /**

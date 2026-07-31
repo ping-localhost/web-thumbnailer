@@ -39,7 +39,7 @@ class FinderFactoryTest extends TestCase
         $this->assertEquals(QueryRegexFinder::class, get_class($finder));
 
         $finder = FinderFactory::getFinder('instagram.com/p/stuff');
-        $this->assertEquals(QueryRegexFinder::class, get_class($finder));
+        $this->assertEquals(UrlRegexFinder::class, get_class($finder));
     }
 
     /**
@@ -131,16 +131,29 @@ class FinderFactoryTest extends TestCase
     }
 
     /**
-     * Test getThumbnailMeta() for Imgur albums.
+     * Test getThumbnailMeta() for Instagram posts.
      */
     public function testGetThumbnailMetaInstagram(): void
     {
-        // imgur single
         $data = FinderFactory::getThumbnailMeta('instagram.com', 'http://instagram.com/p/bla/bla');
+        $this->assertEquals('instagram.com', $data[0]);
+        $this->assertEquals('UrlRegex', $data[1]);
+        $this->assertTrue($data[3]['hotlink_allowed']);
+        $this->assertEquals(
+            'https://www.instagram.com/p/${1}/media/?size=${size}',
+            $data[2]['thumbnail_url']
+        );
+    }
+
+    /**
+     * Test getThumbnailMeta() for Instagram profiles (scraped og:image).
+     */
+    public function testGetThumbnailMetaInstagramProfile(): void
+    {
+        $data = FinderFactory::getThumbnailMeta('instagram.com', 'http://instagram.com/someuser/');
         $this->assertEquals('instagram.com', $data[0]);
         $this->assertEquals('QueryRegex', $data[1]);
         $this->assertTrue($data[3]['hotlink_allowed']);
-        $this->assertEquals(1, count($data[3]));
     }
 
     /**
