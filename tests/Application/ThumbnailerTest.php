@@ -115,7 +115,6 @@ class ThumbnailerTest extends TestCase
         $img = imagecreatefromjpeg($thumburl);
         $this->assertEquals(205, imagesx($img));
         $this->assertEquals(205, imagesy($img));
-        imagedestroy($img);
         unlink($thumburl);
     }
 
@@ -136,7 +135,6 @@ class ThumbnailerTest extends TestCase
         $img = imagecreatefromjpeg($thumburl);
         $this->assertEquals(SizeUtils::getMetaSize(WebThumbnailer::SIZE_SMALL), imagesx($img));
         $this->assertEquals(SizeUtils::getMetaSize(WebThumbnailer::SIZE_SMALL), imagesy($img));
-        imagedestroy($img);
         unlink($thumburl);
     }
 
@@ -157,7 +155,6 @@ class ThumbnailerTest extends TestCase
         $img = imagecreatefromjpeg($thumburl);
         $this->assertEquals(205, imagesx($img));
         $this->assertEquals(205, imagesy($img));
-        imagedestroy($img);
         unlink($thumburl);
     }
 
@@ -178,7 +175,6 @@ class ThumbnailerTest extends TestCase
         $img = imagecreatefromjpeg($thumburl);
         $this->assertEquals(205, imagesx($img));
         $this->assertEquals(205, imagesy($img));
-        imagedestroy($img);
         unlink($thumburl);
     }
 
@@ -188,7 +184,7 @@ class ThumbnailerTest extends TestCase
     public function testDownloadBadConfigurationDownload(): void
     {
         $this->expectException(BadRulesException::class);
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/Only one of these flags can be set between: DOWNLOAD HOTLINK HOTLINK_STRICT/'
         );
         $options = [

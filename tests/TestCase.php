@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace WebThumbnailer;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
 {
-    public function expectExceptionMessageRegExp(string $regularExpression): void
-    {
-        if (method_exists($this, 'expectExceptionMessageMatches')) {
-            $this->expectExceptionMessageMatches($regularExpression);
-        } else {
-            parent::expectExceptionMessageRegExp($regularExpression);
-        }
-    }
 }

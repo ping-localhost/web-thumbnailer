@@ -20,11 +20,11 @@ class ImageUtils
      * doesn't contain funny stuff, and it resize it to a standard size.
      * Resizing conserves proportions.
      *
-     * @param string   $imageStr  Source image.
-     * @param string   $target    Path where the generated thumb will be saved.
-     * @param int      $maxWidth  Max width for the generated thumb.
-     * @param int      $maxHeight Max height for the generated thumb.
-     * @param bool     $crop      Will crop the image to a fixed size if true. Height AND width must be provided.
+     * @param string $imageStr  Source image.
+     * @param string $target    Path where the generated thumb will be saved.
+     * @param int    $maxWidth  Max width for the generated thumb.
+     * @param int    $maxHeight Max height for the generated thumb.
+     * @param bool   $crop      Will crop the image to a fixed size if true. Height AND width must be provided.
      *
      * @throws NotAnImageException   The given resource isn't an image.
      * @throws ImageConvertException Another error occured.
@@ -63,7 +63,7 @@ class ImageUtils
             $maxHeight = $originalHeight;
         }
 
-        list($finalWidth, $finalHeight) = static::calcNewSize(
+        [$finalWidth, $finalHeight] = static::calcNewSize(
             $originalWidth,
             $originalHeight,
             $maxWidth,
@@ -91,39 +91,28 @@ class ImageUtils
                 $originalHeight
             )
         ) {
-            static::imageDestroy($sourceImg);
-            static::imageDestroy($targetImg);
-
             throw new ImageConvertException('Could not generate the thumbnail from source image.');
         }
 
         if ($crop) {
-            $targetImg = imagecrop($targetImg, [
+            $cropped = imagecrop($targetImg, [
                 'x' => $finalWidth >= $finalHeight ? (int) floor(($finalWidth - $maxWidth) / 2) : 0,
                 'y' => $finalHeight <= $finalWidth ? (int) floor(($finalHeight - $maxHeight) / 2) : 0,
                 'width' => $maxWidth,
-                'height' => $maxHeight
+                'height' => $maxHeight,
             ]);
+            if ($cropped === false) {
+                throw new ImageConvertException('Could not generate the thumbnail.');
+            }
+            $targetImg = $cropped;
         }
 
-        if (false === $targetImg) {
-            throw new ImageConvertException('Could not generate the thumbnail.');
-        }
-
-        imagedestroy($sourceImg);
         imagejpeg($targetImg, $target);
-        imagedestroy($targetImg);
     }
 
     /**
      * Calculate image new size to keep proportions depending on actual image size
      * and max width/height settings.
-     *
-     * @param int  $originalWidth  Image original width
-     * @param int  $originalHeight Image original height
-     * @param int  $maxWidth       Target image maximum width
-     * @param int  $maxHeight      Target image maximum height
-     * @param bool $crop           Is cropping enabled
      *
      * @return int[] [final width, final height]
      *
@@ -159,10 +148,6 @@ class ImageUtils
 
     /**
      * Check if a file extension is an image.
-     *
-     * @param string $ext file extension.
-     *
-     * @return bool true if it's an image extension, false otherwise.
      */
     public static function isImageExtension(string $ext): bool
     {
@@ -172,10 +157,6 @@ class ImageUtils
 
     /**
      * Check if a string is an image.
-     *
-     * @param string $content String to check.
-     *
-     * @return bool True if the content is image, false otherwise.
      */
     public static function isImageString(string $content): bool
     {
@@ -183,37 +164,13 @@ class ImageUtils
     }
 
     /**
-     * With custom error handlers, @ does not stop the warning to being thrown.
-     *
-     * @param string $content
-     *
-     * @return resource|false
+     * With custom error handlers, @ does not stop the warning from being thrown.
      */
-    protected static function imageCreateFromString(string $content)
+    protected static function imageCreateFromString(string $content): \GdImage|false
     {
         try {
             return @imagecreatefromstring($content);
-        } catch (\Throwable $e) {
-            // Avoid raising PHP exceptions here with custom error handler, we want to raise our own.
-        }
-
-        return false;
-    }
-
-    /**
-     * With custom error handlers, @ does not stop the warning to being thrown.
-     *
-     * @param resource $image
-     *
-     * @return bool
-     */
-    // resource can't be type hinted:
-    // phpcs:ignore Gskema.Sniffs.CompositeCodeElement.FqcnMethodSniff
-    protected static function imageDestroy($image): bool
-    {
-        try {
-            return @imagedestroy($image);
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Avoid raising PHP exceptions here with custom error handler, we want to raise our own.
         }
 

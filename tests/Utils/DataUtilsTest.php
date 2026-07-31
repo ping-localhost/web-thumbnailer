@@ -28,7 +28,7 @@ class DataUtilsTest extends TestCase
     public function testLoadJsonResourceBadSyntax(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/An error occured while parsing JSON file: error code #/');
+        $this->expectExceptionMessageMatches('/An error occured while parsing JSON file: error code #/');
         $path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
         DataUtils::loadJson($path . 'badsyntax.json');
     }

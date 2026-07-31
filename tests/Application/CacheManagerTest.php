@@ -54,7 +54,7 @@ class CacheManagerTest extends TestCase
     public function testGetCachePathInvalidType(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Unknown cache type/');
+        $this->expectExceptionMessageMatches('/Unknown cache type/');
         CacheManager::getCachePath('nope');
     }
 
@@ -64,7 +64,7 @@ class CacheManagerTest extends TestCase
     public function testGetCachePathNoFolder(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Cache folders are not writable/');
+        $this->expectExceptionMessageMatches('/Cache folders are not writable/');
         CacheManager::getCachePath(CacheManager::TYPE_THUMB, true);
     }
 

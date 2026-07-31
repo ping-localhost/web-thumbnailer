@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.4.0 - 2026-07-31
+
+### Changed
+- Require PHP 8.4+, ext-curl, ext-json, ext-mbstring
+- Dev stack: PHPUnit 13, PHPStan 2, PHPCS 4 (PSR-12)
+- CI on Ubuntu latest / PHP 8.4–8.5
+- README rewritten for the ping-localhost fork
+- GD helpers use `GdImage`; drop no-op `imagedestroy` / `curl_close` (PHP 8.5)
+
+### Fixed
+- Tests compare image geometry instead of brittle JPEG byte equality across GD versions
+
 ## v2.3.1 - 2026-07-31
 
 ### Added

@@ -162,8 +162,10 @@ class DefaultFinder extends FinderCommon
         foreach (['og:image:secure_url', 'og:image', 'og:image:url'] as $prop) {
             $quoted = preg_quote($prop, '#');
             // Exact property match — og:image must not swallow og:image:width etc.
-            $ogRegex = '#<meta[^>]+(?:' . $properties . ')=["\']?' . $quoted . '["\'\s][^>]*content=["\']?(.*?)["\'\s>]#i';
-            $ogRegexReverse = '#<meta[^>]+content=["\']?(.*?)["\'\s][^>]+(?:' . $properties . ')=["\']?' . $quoted . '["\'\s/>]#i';
+            $ogRegex = '#<meta[^>]+(?:' . $properties . ')=["\']?' . $quoted
+                . '["\'\s][^>]*content=["\']?(.*?)["\'\s>]#i';
+            $ogRegexReverse = '#<meta[^>]+content=["\']?(.*?)["\'\s][^>]+(?:' . $properties
+                . ')=["\']?' . $quoted . '["\'\s/>]#i';
 
             if (
                 preg_match($ogRegex, $content, $matches) > 0

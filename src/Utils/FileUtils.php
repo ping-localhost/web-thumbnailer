@@ -14,16 +14,12 @@ class FileUtils
      * Build the path from all given folders, with a trailing /.
      * It will stay a relative or absolute path depending on what's provided.
      *
-    // phpcs:ignore Gskema.Sniffs.CompositeCodeElement.FqcnMethodSniff
-     * @param string[] $args Suite of path/folders.
-     *
      * @return string|false Path with proper directory separators, false if it doesn't exist.
      */
-    // phpcs:ignore Gskema.Sniffs.CompositeCodeElement.FqcnMethodSniff
     public static function getPath(string ...$args)
     {
         $out = '';
-        if (empty($args)) {
+        if ($args === []) {
             return false;
         }
         foreach ($args as $arg) {

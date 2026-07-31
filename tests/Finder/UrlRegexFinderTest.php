@@ -246,7 +246,7 @@ class UrlRegexFinderTest extends TestCase
     public function testFindWithDefaultOptionsNoDefault(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/No default set for option/');
+        $this->expectExceptionMessageMatches('/No default set for option/');
 
         $url = 'http://test.io/?123';
         $rules = array(
@@ -269,7 +269,7 @@ class UrlRegexFinderTest extends TestCase
     public function testFindWithDefaultOptionsNoDefaultParam(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/No default parameter set for option/');
+        $this->expectExceptionMessageMatches('/No default parameter set for option/');
 
         $url = 'http://test.io/?123';
         $rules = array(
@@ -293,7 +293,7 @@ class UrlRegexFinderTest extends TestCase
     public function testFindWithDefaultOptionsUnknownOption(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Unknown option/');
+        $this->expectExceptionMessageMatches('/Unknown option/');
 
         $url = 'http://test.io/?123';
         $rules = array(

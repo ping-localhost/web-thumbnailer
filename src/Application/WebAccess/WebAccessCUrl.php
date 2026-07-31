@@ -119,7 +119,7 @@ class WebAccessCUrl implements WebAccess
         $errorNo = curl_errno($ch);
         $errorStr = curl_error($ch);
         $headSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        curl_close($ch);
+        unset($ch);
 
         if (!is_string($response)) {
             return [[0 => 'curl_exec() error #' . $errorNo . ': ' . $errorStr], false];
