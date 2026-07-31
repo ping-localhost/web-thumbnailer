@@ -15,15 +15,18 @@
     ],
     "require": {
         "php": ">=8.4",
-        "ext-curl": "*",
         "ext-gd": "*",
         "ext-json": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "symfony/http-client": "^7.0 || ^8.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^13.2",
         "squizlabs/php_codesniffer": "^4.0"
+    },
+    "suggest": {
+        "ext-curl": "Preferred transport for Symfony HttpClient (falls back to native streams without it)"
     },
     "replace": {
         "arthurhoaro/web-thumbnailer": "self.version"

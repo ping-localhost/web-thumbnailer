@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## v2.4.0 - 2026-07-31
 
 ### Changed
-- Require PHP 8.4+, ext-curl, ext-json, ext-mbstring
+- Require PHP 8.4+, ext-gd, ext-json, ext-mbstring, and `symfony/http-client`
+- Remote downloads use Symfony HttpClient instead of raw curl / `file_get_contents`
 - Dev stack: PHPUnit 13, PHPStan 2, PHPCS 4 (PSR-12)
 - CI on Ubuntu latest / PHP 8.4–8.5
 - README rewritten for the ping-localhost fork
 - GD helpers use `GdImage`; drop no-op `imagedestroy` / `curl_close` (PHP 8.5)
+
+### Removed
+- `WebAccessCUrl` and `WebAccessPHP` transports (replaced by `WebAccessHttpClient`)
 
 ### Fixed
 - Tests compare image geometry instead of brittle JPEG byte equality across GD versions

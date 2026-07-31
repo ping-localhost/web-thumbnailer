@@ -7,7 +7,8 @@ Fork of [ArthurHoaro/web-thumbnailer](https://github.com/ArthurHoaro/web-thumbna
 ## Requirements
 
 - PHP **8.4+**
-- Extensions: `gd`, `curl`, `json`, `mbstring`
+- Extensions: `gd`, `json`, `mbstring` (and `curl` recommended for Symfony HttpClient)
+- `symfony/http-client` ^7 or ^8
 
 ## Installation
 
